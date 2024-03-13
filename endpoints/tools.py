@@ -60,6 +60,7 @@ tools_qr_parser.add_argument(
     "size",
     type=int,
     default=8,
+    choices=list(range(1, 51)),
     help="Size of the QR code (as a factor of the base size)",
 )
 tools_qr_parser.add_argument(
@@ -83,6 +84,14 @@ class QRCodeGenerator(Resource):
     )
     def get(self):
         args = tools_qr_parser.parse_args()
+        
+        # Ensure the data is not too long
+        if len(args["data"]) > 1000:
+            return {
+                "ok": False,
+                "status": 400,
+                "message": "The data cannot be longer than 1000 characters",
+            }, 400
 
         try:
             # Map the error correction input to the qrcode constants
