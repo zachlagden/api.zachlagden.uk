@@ -46,14 +46,16 @@ def custom_key_func() -> Union[str, None]:
 limiter = Limiter(
     app=app,
     key_func=custom_key_func,
-    default_limits=["200 per day", "50 per hour"],  # Default rate limit
+    default_limits=["2000 per day", "500 per hour"],  # Default rate limit
 )
 
 # Flask Endpoints
 
+
 @app.route("/")
 def _index():
     return render_template("index.html")
+
 
 # Define the API
 api = Api(
@@ -67,10 +69,10 @@ api = Api(
 )
 
 # Add the namespaces to the API
-from endpoints import activity, tools
+from endpoints import activity, images
 
 api.add_namespace(activity.NSactivity)
-api.add_namespace(tools.NStools)
+api.add_namespace(images.NSimages)
 
 if __name__ == "__main__":
     app.run(debug=True, port=43333)
